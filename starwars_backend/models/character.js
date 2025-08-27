@@ -18,7 +18,8 @@ module.exports = (sequelize, DataTypes) => {
     gender: DataTypes.STRING,
     birth_year: DataTypes.STRING,
     image_url: DataTypes.STRING,
-    movies: DataTypes.STRING
+    movies: DataTypes.STRING,
+    origin_planet: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'Character',
