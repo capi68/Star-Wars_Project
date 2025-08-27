@@ -5,7 +5,9 @@ const db = require('./models'); // importa sequelize
 const app = express();
 const charactersRoutes = require("./routes/characters"); // importacion de rutas
 const PORT = process.env.PORT || 3000;
+const cors = require ("cors");
 
+app.use(cors());
 app.use(express.json());
 
 
