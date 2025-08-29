@@ -19,7 +19,11 @@ module.exports = (sequelize, DataTypes) => {
     birth_year: DataTypes.STRING,
     image_url: DataTypes.STRING,
     movies: DataTypes.STRING,
-    origin_planet: DataTypes.STRING
+    origin_planet: DataTypes.STRING,
+    active: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: true
+    }
   }, {
     sequelize,
     modelName: 'Character',

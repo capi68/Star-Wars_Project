@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { Character } = require("../models"); // importa modelo de sequielize
+const { where } = require("sequelize");
 
 
 
@@ -8,10 +9,21 @@ const { Character } = require("../models"); // importa modelo de sequielize
 
 router.get("/", async(req, res) => {
     try {
-        const characters = await Character.findAll();
+        const characters = await Character.findAll({ where: { active: true }});
         res.json(characters);
     } catch (error) {
         res.status(500).json({ error: "Error al cargar personajes"});
+    }
+});
+
+// GET listado de inactivos
+
+router.get("/inactive", async (req, res) => {
+    try {
+        const inactiveCharacters = await Character.findAll({ where: { active: false }  });
+        res.json(inactiveCharacters);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
     }
 });
 
@@ -49,6 +61,9 @@ router.post("/", async (req, res) => {
     }
 });
 
+
+
+
 // PUT update nuevo character
 router.put("/:id", async(req, res) => {
     try {
@@ -75,11 +90,48 @@ router.delete("/:id", async(req, res) => {
             return res.status(404).json({ error: "Personaje no encontrado"});
         }
 
-        await character.destroy();
-        res.json({ message: "Personaje eliminado correctamente" });
+        character.active = false;
+        await character.save();
+
+        res.json({ message: "Personaje inactivo por soft delete" });
     } catch (error) {
-        res.status(500).json({ error: "Error al eliminar personaje" });
+        res.status(500).json({ error: error.message });
     }
 });
+
+// PUT reactivar personajes inactivos
+router.put('/:id/restore', async (req, res) => {
+
+        const { id } = req.params;
+        const restoreCharacter = await Character.findByPk( id );
+        if (!restoreCharacter) return res.status(404).json({ error: "Personaje no encontrado" });
+
+        restoreCharacter.active = true;
+        await restoreCharacter.save();
+
+        res.json({ message: `Personaje ${restoreCharacter.name} reactivado` });
+});
+
+// PATCH actualizacion parcial de Characters
+
+router.patch('/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const fieldsToUpdate = req.body; // actualizar parcialmente
+
+        const character = await Character.findByPk(id); 
+        if (!character) {
+            return res.status(404).json({ error: "Personaje no encontrado" });
+        }
+
+        await character.update(fieldsToUpdate);
+
+        res.json( { message: "Personaje actualizado parcialmente", character });
+    } catch (error) {
+        res.status(500).json({ error: "Error al actualizar parcialmente el personaje" });
+    }
+
+    });
 
 module.exports =  router;
