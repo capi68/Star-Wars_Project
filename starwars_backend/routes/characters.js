@@ -1,47 +1,16 @@
 const express = require("express");
 const router = express.Router();
-const { Character } = require("../models"); // importa modelo de sequielize
+const { Character } = require("../models"); // import models from sequielize
 const { where } = require("sequelize");
 
 
+//======================
+//CRUD  "/"
+//====================== 
 
-//GET all characters
 
-router.get("/", async(req, res) => {
-    try {
-        const characters = await Character.findAll({ where: { active: true }});
-        res.json(characters);
-    } catch (error) {
-        res.status(500).json({ error: "Error al cargar personajes"});
-    }
-});
+// POST create a new character
 
-// GET listado de inactivos
-
-router.get("/inactive", async (req, res) => {
-    try {
-        const inactiveCharacters = await Character.findAll({ where: { active: false }  });
-        res.json(inactiveCharacters);
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-});
-
-// GET characters por ID
-router.get("/:id", async(req, res) => {
-    try {
-        const character = await Character.findByPk(req.params.id);
-        if (character) {
-            res.json(character);
-        } else {
-            res.status(404).json({ error: "personaje no encontrado"});
-        }
-    } catch (error) {
-        res.status(500).json({ error: "Error al obtener personaje"});
-    }
-});
-
-// POST crear un nuevo character
 router.post("/", async (req, res) => {
     try {
         const { name, gender, birth_year, image_url, movies, origin_planet } = req.body;
@@ -57,14 +26,60 @@ router.post("/", async (req, res) => {
 
         res.status(201).json(newCharacter);
     } catch (error) {
-        res.status(500).json({ error: "Error al crear personaje"});
+        res.status(500).json({ error: "Error creating a character"});
+    }
+});
+
+
+//GET all characters
+
+router.get("/", async(req, res) => {
+    try {
+        const characters = await Character.findAll({ where: { active: true }});
+        res.json(characters);
+    } catch (error) {
+        res.status(500).json({ error: "Error loading characters"});
     }
 });
 
 
 
 
-// PUT update nuevo character
+// GET inactive list
+
+//router.get("/inactive", async (req, res) => {
+//    try {
+//      const inactiveCharacters = await Character.findAll({ where: { active: false }  });
+//        res.json(inactiveCharacters);
+//    } catch (error) {
+//        res.status(500).json({ error: error.message });
+//    }
+//});
+
+
+
+//=======================
+// CRUD  "/:id"
+//=======================
+
+// GET characters for ID
+
+router.get("/:id", async(req, res) => {
+    try {
+        const character = await Character.findByPk(req.params.id);
+        if (character) {
+            res.json(character);
+        } else {
+            res.status(404).json({ error: "character not found"});
+        }
+    } catch (error) {
+        res.status(500).json({ error: "Error getting character"});
+    }
+});
+
+
+// PUT update new character
+
 router.put("/:id", async(req, res) => {
     try {
         const { id } = req.params;
@@ -72,66 +87,52 @@ router.put("/:id", async(req, res) => {
 
         const character = await Character.findByPk(id);
         if(!character) {
-            return res.status(404).json({ error: "Personaje no encontrado"});
+            return res.status(404).json({ error: "character not found"});
         }
 
         await character.update({ name, gender, birth_year, image_url, movies, origin_planet });
     } catch (error) {
-        res.status(500).json({ error: "Error al actualizar el personaje"});
+        res.status(500).json({ error: "Error when updating character"});
     }
 });
 
-// DELETE character
-router.delete("/:id", async(req, res) => {
-    try {
-        const { id } = req.params;
-        const character = await Character.findByPk(id);
-        if(!character) {
-            return res.status(404).json({ error: "Personaje no encontrado"});
-        }
-
-        character.active = false;
-        await character.save();
-
-        res.json({ message: "Personaje inactivo por soft delete" });
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-});
-
-// PUT reactivar personajes inactivos
-router.put('/:id/restore', async (req, res) => {
-
-        const { id } = req.params;
-        const restoreCharacter = await Character.findByPk( id );
-        if (!restoreCharacter) return res.status(404).json({ error: "Personaje no encontrado" });
-
-        restoreCharacter.active = true;
-        await restoreCharacter.save();
-
-        res.json({ message: `Personaje ${restoreCharacter.name} reactivado` });
-});
-
-// PATCH actualizacion parcial de Characters
+// PATCH updating parcial from characters
 
 router.patch('/:id', async (req, res) => {
     try {
         const { id } = req.params;
 
-        const fieldsToUpdate = req.body; // actualizar parcialmente
-
         const character = await Character.findByPk(id); 
         if (!character) {
-            return res.status(404).json({ error: "Personaje no encontrado" });
+            return res.status(404).json({ error: "character not found" });
         }
 
         await character.update(fieldsToUpdate);
 
-        res.json( { message: "Personaje actualizado parcialmente", character });
+        res.json( { message: "update character", character });
     } catch (error) {
-        res.status(500).json({ error: "Error al actualizar parcialmente el personaje" });
+        res.status(500).json({ error: "Error when updating character" });
     }
 
     });
+
+// DELETE character
+
+router.delete("/:id", async(req, res) => {
+    try {
+        const { id } = req.params;
+        const character = await Character.findByPk(id);
+        if(!character) {
+            return res.status(404).json({ error: "character not found"});
+        }
+
+        character.active = false;
+        await character.save();
+
+        res.json({ message: "character inactive for soft delete" });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
 
 module.exports =  router;

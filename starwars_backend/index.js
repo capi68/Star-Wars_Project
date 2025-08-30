@@ -9,7 +9,10 @@ const cors = require ("cors");
 
 app.use(cors());
 app.use(express.json());
-
+app.use((req, res, next) => {
+    res.setHeader("Cache-Control", "no-store");
+    next();
+});
 
 // Monta rutas desde  routes/characters.js
 app.use("/characters", charactersRoutes);
