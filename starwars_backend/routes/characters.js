@@ -35,7 +35,7 @@ router.post("/", async (req, res) => {
 
 router.get("/", async(req, res) => {
     try {
-        const characters = await Character.findAll({ where: { active: true }});
+        const characters = await Character.findAll({ where: { active: true }, order: [["id", "ASC"]]});
         res.json(characters);
     } catch (error) {
         res.status(500).json({ error: "Error loading characters"});
