@@ -11,8 +11,9 @@ function App() {
   }, []);
 
   return(
-    <div>
-      <h1>Star Wars Characters</h1>
+    <>
+    <div style={{display: "flex", justifyContent: "center", width: "100vw", flexDirection: "column", border: "1px solid black"}}>
+      <h1 style={{justifyContent: "center", border: "1px solid black", margin: "20px auto" }}>Star Wars Characters</h1>
       <ul>
         {characters.map(c => (
           <li key={c.id}>
@@ -21,6 +22,7 @@ function App() {
         ))}
       </ul>
     </div>
+    </>
   );
 }
 

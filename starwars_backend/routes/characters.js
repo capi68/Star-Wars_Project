@@ -107,7 +107,7 @@ router.patch('/:id', async (req, res) => {
             return res.status(404).json({ error: "character not found" });
         }
 
-        await character.update(fieldsToUpdate);
+        await character.update(req.body);
 
         res.json( { message: "update character", character });
     } catch (error) {
