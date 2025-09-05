@@ -99,22 +99,23 @@ router.put("/:id", async(req, res) => {
 // PATCH updating parcial from characters
 
 router.patch('/:id', async (req, res) => {
-    try {
-        const { id } = req.params;
+  try {
+    const id = parseInt(req.params.id, 10); // fuerza a número
 
-        const character = await Character.findByPk(id); 
-        if (!character) {
-            return res.status(404).json({ error: "character not found" });
-        }
-
-        await character.update(req.body);
-
-        res.json( { message: "update character", character });
-    } catch (error) {
-        res.status(500).json({ error: "Error when updating character" });
+    const character = await Character.findByPk(id);
+    if (!character) {
+      return res.status(404).json({ error: "character not found" });
     }
 
-    });
+    const updated = await character.update(req.body);
+    console.log("UPDATED:", updated.toJSON()); // debug
+
+    res.json({ message: "update character", character: updated });
+  } catch (error) {
+    console.error("PATCH error:", error);
+    res.status(500).json({ error: error.message });
+  }
+});
 
 // DELETE character
 
