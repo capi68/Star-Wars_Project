@@ -10,7 +10,7 @@ function App() {
   // calls all characters in the database
   useEffect(() => {
     axios
-    .get("http://localhost:3000/characters")
+    .get(`${import.meta.env.VITE_API_URL}/characters`)
     .then(res => setCharacters(res.data))
     .catch(error => console.error(error));
   }, []);
