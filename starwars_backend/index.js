@@ -6,6 +6,9 @@ const app = express();
 const charactersRoutes = require("./routes/characters"); // importacion de rutas
 const PORT = process.env.PORT || 3000;
 const cors = require ("cors");
+const dotenv = require('dotenv');
+dotenv.config();
+
 
 app.use(cors());
 app.use(express.json());
@@ -24,6 +27,16 @@ app.get('/', (req, res) => {
 });
 
 // Iniciar servidor
-app.listen(PORT, () => {
-    console.log(`Servidor corriendo en http://localhost:${PORT}`);
-});
+(async function start() {
+  try {
+    await db.sequelize.authenticate();
+    console.log(" DB connection success");
+    
+    app.listen(PORT, () => {
+      console.log(`Servidor corriendo en http://localhost:${PORT}`);
+    });
+  } catch (err) {
+    console.error("DB connection failed:", err);
+    process.exit(1); // exit with error code
+  }
+})();

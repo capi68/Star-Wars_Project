@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { Character } = require("../models"); // import models from sequielize
+const db = require("../models"); // import sequelize db
 const { where } = require("sequelize");
 
 
@@ -43,7 +44,16 @@ router.get("/", async(req, res) => {
 });
 
 
-
+//GET conection test to db
+router.get("/test-db", async(req, res) => {
+    try {
+        await db.sequelize.authenticate();//conection test
+        res.send("conection success")
+    } catch (error) {
+        console.error("conection error:", error);
+        res.status(500).send("Error de de conexion a  la base de datos: " + error.message);
+    }
+});
 
 // GET inactive list
 
