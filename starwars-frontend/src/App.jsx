@@ -10,6 +10,8 @@ function App() {
 
   // calls all characters in the database
   useEffect(() => {
+    setLoading(true);
+
     axios
     .get(`${import.meta.env.VITE_API_URL}/characters`)
     .then(res => {
@@ -30,7 +32,7 @@ function App() {
 
   if(loading) {
     return (
-      <div>
+      <div className=''>
         <img src="/images/Loading-image.gif" alt="" />
       </div>
     );
