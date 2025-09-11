@@ -23,10 +23,11 @@ function App() {
   }, []);
 
   if(loading) {
-    return
+    return (
       <div>
         <img src="/images/Loading-image.gif" alt="" />
       </div>
+    );
   }
 
 
