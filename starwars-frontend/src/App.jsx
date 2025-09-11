@@ -6,14 +6,28 @@ function App() {
   const [characters, setCharacters] = useState([]);
   const [search, setSearch] = useState("");
   const [selectedCharacter, setSelectedCharacter] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   // calls all characters in the database
   useEffect(() => {
     axios
     .get(`${import.meta.env.VITE_API_URL}/characters`)
-    .then(res => setCharacters(res.data))
-    .catch(error => console.error(error));
+    .then(res => {
+      setCharacters(res.data);
+      setLoading(false);
+  })
+    .catch(error => {
+      console.error(error);
+      setLoading(false);
+  });
   }, []);
+
+  if(loading) {
+    return
+      <div>
+        <img src="/images/Loading-image.gif" alt="" />
+      </div>
+  }
 
 
   // function to search for character by attribute
