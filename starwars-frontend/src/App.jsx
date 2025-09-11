@@ -15,15 +15,12 @@ function App() {
     axios
     .get(`${import.meta.env.VITE_API_URL}/characters`)
     .then(res => {
-      setCharacters(res.data);
-      setLoading(false);
-  })
-    .then(data => {
       setTimeout(() => {
-        setCharacters(data);
+        setCharacters(res.data);
         setLoading(false);
       }, 2000);
-    })
+      
+  })
     .catch(error => {
       console.error(error);
       setLoading(false);
@@ -32,8 +29,8 @@ function App() {
 
   if(loading) {
     return (
-      <div className=''>
-        <img src="/images/Loading-image.gif" alt="" />
+      <div className='flex items-center justify-center h-screen'>
+        <img src="/images/Loading-image.gif" alt="loading..." />
       </div>
     );
   }
