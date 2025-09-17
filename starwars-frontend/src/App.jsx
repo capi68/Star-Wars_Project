@@ -148,7 +148,7 @@ function App() {
     {loading && (
     <div className='fixed inset-0 bgblack/70 flex flex-col items-center justify-center z-50'>
       <img 
-        src="images/loading-imagr.gif" alt="Cargando data..."
+        src="images/Loading-image.gif" alt="Cargando data..."
         className='w-20 h-20 mb-4'
       />
       <p className='text-red-500 text-lg font-semibold'>Cargando personajes...</p>
