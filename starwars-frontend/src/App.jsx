@@ -52,7 +52,11 @@ function App() {
     <>
 
     {/* Background Image */}
-    <img src="/images/Background_Image.jpeg" alt="Background image" className='fixed inset-0 w-full h-full object-cover -z-10' />
+    <img 
+      src="/images/Background_Image.jpeg"  
+      alt="Background image" 
+      className='fixed inset-0 w-full h-full object-cover -z-10' 
+    />
 
 
     {/* Div Container */ }
@@ -147,6 +151,15 @@ function App() {
         </motion.div>
     )}
     </AnimatePresence>
+
+    {/* overlay loading */ }
+    <div className='fixed inset-0 bgblack/70 flex flex-col items-center justify-center z-50'>
+      <img 
+        src="images/loading-imagr.gif" alt="Cargando data..."
+        className='w-20 h-20 mb-4'
+      />
+      <p className='text-red-500 text-lg font-semibold'>Cargando personajes...</p>
+    </div>
     </>
   );
 }
