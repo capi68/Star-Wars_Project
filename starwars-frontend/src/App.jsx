@@ -27,14 +27,6 @@ function App() {
   });
   }, []);
 
-  if(loading) {
-    return (
-      <div className='flex items-center justify-center h-screen'>
-        <img src="/images/Loading-image.gif" alt="loading..." />
-      </div>
-    );
-  }
-
 
   // function to search for character by attribute
   const filteredCharacters = characters.filter((c) => {
@@ -153,6 +145,7 @@ function App() {
     </AnimatePresence>
 
     {/* overlay loading */ }
+    {loading && (
     <div className='fixed inset-0 bgblack/70 flex flex-col items-center justify-center z-50'>
       <img 
         src="images/loading-imagr.gif" alt="Cargando data..."
@@ -160,6 +153,7 @@ function App() {
       />
       <p className='text-red-500 text-lg font-semibold'>Cargando personajes...</p>
     </div>
+    )}
     </>
   );
 }
