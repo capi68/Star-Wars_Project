@@ -146,10 +146,10 @@ function App() {
 
     {/* overlay loading */ }
     {loading && (
-    <div className='fixed inset-0 bgblack/70 flex flex-col items-center justify-center z-50'>
+    <div className='fixed inset-0 bg-black/70 flex flex-col items-center justify-center z-50'>
       <img 
         src="images/Loading-image.gif" alt="Cargando data..."
-        className='w-20 h-20 mb-4'
+        className='w-1/2 h-auto mb-4'
       />
       <p className='text-red-500 text-lg font-semibold'>Cargando personajes...</p>
     </div>
